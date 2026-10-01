@@ -1,261 +1,263 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Социальное неравенство и состояние экономики — интерактивная карта</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GNI и состояние экономики — 40 стран</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <style>
-:root{--ink:#182331;--muted:#687384;--line:#dfe5eb;--bg:#f5f7f9;--card:#fff;--accent:#2d4057;--accent2:#667b91}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-header{background:#182331;color:#fff;padding:46px 5vw 38px}.wrap{width:min(1450px,92vw);margin:auto}
-.kicker{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#b8c4d0}.title{font-size:clamp(32px,5vw,60px);line-height:1.03;margin:10px 0}.subtitle{max-width:900px;color:#d4dce5;font-size:17px}
-section{margin:22px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 5px 24px rgba(24,35,49,.05)}
-h2{margin:0 0 7px;font-size:27px}h3{margin:0 0 8px}.muted{color:var(--muted);font-size:14px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0}.btn,.select{border:1px solid #cbd3dc;background:#fff;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:600;color:var(--ink)}.btn.active{background:var(--ink);color:#fff}
-.mapgrid{display:grid;grid-template-columns:1fr 310px;gap:14px}#map{height:650px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
-.side{display:flex;flex-direction:column;min-height:650px}.region-title{font-size:20px;font-weight:750;margin-bottom:10px}.country-list{overflow:auto;padding-right:3px}.country{display:flex;align-items:center;justify-content:space-between;padding:10px 11px;border:1px solid var(--line);border-radius:10px;margin:7px 0;background:#fff;cursor:pointer}.country:hover,.country.active{background:#eef2f6;border-color:#aeb9c5}.country small{color:var(--muted)}
-.legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:#26384b}
-.profilegrid{display:grid;grid-template-columns:1fr 1.2fr;gap:16px}.profile{min-height:360px}.countryname{font-size:30px;font-weight:800}.badge{display:inline-block;background:#eef2f6;border-radius:999px;padding:5px 9px;margin:5px 4px 0 0;font-size:12px}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:15px}.metric{border:1px solid var(--line);border-radius:11px;padding:10px}.metric span{display:block;color:var(--muted);font-size:12px}.metric b{font-size:17px}
-.tablewrap{overflow:auto;max-height:650px;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:1120px}th,td{padding:10px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}th{position:sticky;top:0;background:#eef2f5;font-size:12px}th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:inherit}
-.patterns{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pattern{border:1px solid var(--line);border-radius:13px;padding:15px}.corrtable{width:100%;min-width:0}.corrtable td:first-child,.corrtable th:first-child{position:static;text-align:left}.chartbox{height:360px}.search{width:260px}
-.note{background:#f0f3f6;border-left:4px solid #5b6e82;border-radius:8px;padding:13px 15px;color:#465462}
-footer{padding:20px 0 55px;color:var(--muted);font-size:12px}
-@media(max-width:950px){.mapgrid,.profilegrid,.patterns{grid-template-columns:1fr}#map{height:520px}.side{min-height:auto}.metrics{grid-template-columns:1fr}}
+:root{--bg:#f5f7fa;--card:#fff;--ink:#17212b;--muted:#687584;--line:#dfe5eb;--accent:#20364d;--accent2:#536d85;--soft:#edf2f6;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:linear-gradient(135deg,#172534,#2f465b);color:white;padding:44px 5vw}
+.container{width:min(1450px,94vw);margin:auto}
+.kicker{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#c5d0da;margin-bottom:10px}
+h1{font-size:clamp(32px,5vw,60px);line-height:1.05;margin:0 0 14px;letter-spacing:-1.5px}
+header p{max-width:900px;color:#d8e0e7;font-size:17px;margin:0}
+main{padding:25px 0 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 4px 18px rgba(20,35,50,.045);margin-bottom:20px}
+h2{margin:0 0 7px;font-size:27px} h3{margin:0 0 7px}
+.muted{color:var(--muted);font-size:14px}
+.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:16px 0}
+button,select,input{font:inherit}
+button,select,input{border:1px solid #cdd5de;border-radius:10px;background:#fff;padding:10px 12px}
+button{cursor:pointer}
+button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+select{min-width:220px}
+input{width:100%}
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px}
+#map{height:650px}
+.region-panel{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.region-head{padding:14px 15px;background:#f1f4f7;border-bottom:1px solid var(--line);font-weight:700}
+.region-list{max-height:590px;overflow:auto}
+.region-item{padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.region-item:hover,.region-item.selected{background:#f0f4f7}
+.region-item b{display:block}
+.region-item span{font-size:12px;color:var(--muted)}
+.country-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:18px}
+.country-card{min-height:350px}
+.country-title{font-size:31px;font-weight:800;margin-top:8px}
+.pill{display:inline-block;background:var(--soft);border-radius:999px;padding:5px 9px;font-size:12px;margin:4px 4px 0 0}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:17px}
+.metric{border:1px solid var(--line);border-radius:12px;padding:12px}
+.metric span{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
+.metric b{font-size:18px}
+.table-wrap{overflow:auto;max-height:650px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:1100px}
+th,td{padding:10px 11px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
+th{background:#f1f4f7;position:sticky;top:0;z-index:2;font-size:12px}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:inherit;z-index:1}
+tr:hover td{background:#f8fafb}
+.visuals{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chart{height:430px}
+.corr-table td:first-child{font-weight:700}
+.note{background:#f0f4f7;border-left:4px solid #536d85;padding:15px;border-radius:8px}
+.region-summary{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.region-summary .pill{font-size:13px}
+@media(max-width:1000px){.map-layout,.country-layout,.visuals{grid-template-columns:1fr}#map{height:520px}}
 </style>
 </head>
 <body>
-<header><div class="wrap">
-<div class="kicker">Исследовательский проект · 2025 · 40 стран</div>
-<div class="title">Социальное неравенство<br>и состояние экономики</div>
-<div class="subtitle">Статистика за 2025 год. Интерактивная карта и сравнительная база данных; анализ отражает наблюдаемые статистические закономерности и не доказывает причинность.</div>
+<header><div class="container">
+<div class="kicker">Исследовательский продукт · 2025 · 40 стран</div>
+<h1>Социальное неравенство<br>и состояние экономики</h1>
+<p>Интерактивная карта и сравнительная база данных для анализа <b>закономерностей</b> между уровнем неравенства и экономическими показателями. Корреляция используется для описания статистических связей, а не как доказательство причинно-следственных эффектов.</p>
 </div></header>
 
-<main class="wrap">
+<main class="container">
 <section class="card">
-<h2>🌍 Интерактивная карта</h2>
-<div class="muted">Выберите регион — карта приблизится к нему, а справа автоматически останутся только страны из вашей выборки. Нажмите страну на карте или в списке.</div>
-<div class="toolbar" id="regions"></div>
-<div class="toolbar"><label class="muted" style="padding-top:10px">Показатель:</label><select class="select" id="indicator"></select></div>
-<div class="mapgrid">
-<div><div id="map"></div><div class="legend"><span><i class="dot"></i> исследуемая страна</span><span>Остальные страны мира — фон и не кликабельны.</span></div></div>
-<aside class="card side"><div class="region-title" id="regionTitle">Мир</div><div class="muted" id="regionCount"></div><div class="country-list" id="countryList"></div></aside>
+<h2>1. Интерактивная карта мира</h2>
+<p class="muted">На карте показаны границы всех стран мира. Цветом выделяются только 40 стран исследовательской выборки; только они имеют интерактивность и открывают данные. Переключение региона одновременно меняет масштаб карты и список стран справа.</p>
+<div class="controls" id="regionButtons"></div>
+<div class="controls">
+<label><b>Показатель:</b></label>
+<select id="indicatorSelect"></select>
 </div>
-</section>
-
-<section class="profilegrid">
-<div class="card profile"><h2>Выбранная страна</h2><div id="profile"></div></div>
-<div class="card"><h2>Все показатели выбранной страны</h2><div class="chartbox"><canvas id="radar"></canvas></div></div>
-</section>
-
-<section class="card">
-<h2>📋 Все 40 стран</h2>
-<div class="muted">Полная сравнительная таблица из последней версии Excel.</div>
-<div class="toolbar"><input class="select search" id="search" placeholder="Поиск страны…"></div>
-<div class="tablewrap"><table id="table"></table></div>
-</section>
-
-<section class="card">
-<h2>📈 Закономерности по Джини</h2>
-<div class="muted">Здесь используются средние значения групп и коэффициенты корреляции. Формулировка «закономерность» означает наблюдаемую статистическую связь в данной выборке; она не означает доказанное причинно-следственное влияние.</div>
-<div class="patterns" id="patterns" style="margin-top:15px"></div>
-<div class="profilegrid" style="margin-top:16px">
-<div><h3>Средние значения по группам Джини</h3><div class="chartbox"><canvas id="meansChart"></canvas></div></div>
-<div><h3>Корреляция Джини с показателями</h3><div class="chartbox"><canvas id="corrChart"></canvas></div></div>
+<div class="map-layout">
+<div id="map"></div>
+<div class="region-panel">
+<div class="region-head" id="regionHead">Страны региона</div>
+<div class="region-list" id="regionList"></div>
+</div>
 </div>
 </section>
 
 <section class="card">
-<h2>Корреляционный анализ</h2>
-<table class="corrtable"><thead><tr><th>Показатель</th><th>r</th><th>Направление</th><th>Сила связи</th><th>n</th></tr></thead><tbody id="corrBody"></tbody></table>
+<h2>2. Профиль страны</h2>
+<p class="muted">Выбери страну в списке региона или нажми на неё на карте.</p>
+<select id="countrySelect" style="width:100%;margin:12px 0"></select>
+<div id="countryCard" class="country-card"></div>
 </section>
 
-<section class="card"><h2>Методологическая оговорка</h2>
-<div class="note"><b>Важно:</b> коэффициент корреляции показывает направление и выраженность линейной статистической связи. Он не доказывает, что высокий или низкий Джини является причиной изменения ВВП, безработицы, производительности или другого показателя. Поэтому в работе корректнее говорить о <b>закономерностях, ассоциациях и наблюдаемом направлении связи</b>.</div>
+<section class="card">
+<h2>3. Все 40 стран — единая таблица</h2>
+<p class="muted">Можно искать страну и сравнивать все показатели в одной строке.</p>
+<input id="search" placeholder="Поиск по названию страны…">
+<div class="table-wrap" style="margin-top:12px"><table id="dataTable"></table></div>
+</section>
+
+<section class="card">
+<h2>4. Закономерности по уровню GNI</h2>
+<p class="muted">Сравнение средних значений трёх групп: GNI &lt;30, 30–40 и &gt;40. Это описание наблюдаемых различий между группами, а не утверждение о том, что GNI является их причиной.</p>
+<div class="region-summary">
+<span class="pill">Группа 1: GNI &lt;30</span>
+<span class="pill">Группа 2: GNI 30–40</span>
+<span class="pill">Группа 3: GNI &gt;40</span>
+</div>
+<div class="visuals">
+<div><h3>Средние значения по группам</h3><div id="groupChart" class="chart"></div></div>
+<div><h3>Корреляция GNI с показателями</h3><div id="corrChart" class="chart"></div></div>
+</div>
+<div id="patternText"></div>
+</section>
+
+<section class="card">
+<h2>5. Корреляционный анализ</h2>
+<p class="muted">Расчёт выполнен по 40 странам. Знак r показывает направление линейной связи, а |r| — её выраженность.</p>
+<table><thead><tr><th style="text-align:left">Показатель</th><th>r</th><th>n</th><th>Направление</th><th>Сила связи</th></tr></thead><tbody id="corrBody"></tbody></table>
+</section>
+
+<section class="card">
+<h2>6. Методологическая оговорка</h2>
+<div class="note"><b>Главный принцип интерпретации:</b> в исследовании корректно говорить «наблюдается отрицательная/положительная связь», «среднее значение снижается/увеличивается», «выраженная закономерность не обнаружена». Эти результаты сами по себе не доказывают, что изменение GNI вызывает изменение конкретного экономического показателя.</div>
+<p class="muted" style="margin-top:12px">Данные для 40 стран и значения корреляций взяты из последнего загруженного Excel пользователя. Региональная группировка в интерфейсе используется только для навигации по карте.</p>
 </section>
 </main>
-<footer><div class="wrap">Источник данных: последняя предоставленная Excel-таблица исследовательского проекта. Карта использует Leaflet и публичную геометрию границ стран; внешний тайловый сервер OpenStreetMap не используется.</div></footer>
 
 <script>
-const DATA = [{"country": "Россия", "gdp": 17546.6, "gni_income": 15320, "inflation": 0.087, "unemployment": 2.1, "employment": 61.5, "gfcf": 23, "productivity": 85728, "balance": -2.6, "gini": 37.0, "region": "Евразия", "iso": "RUS"}, {"country": "Германия", "gdp": 60496.4, "gni_income": 55090, "inflation": 0.022, "unemployment": 3.7, "employment": 59.3, "gfcf": 20, "productivity": 124203, "balance": -2.7, "gini": 30.1, "region": "Европа", "iso": "DEU"}, {"country": "Франция", "gdp": 48985.7, "gni_income": 45160, "inflation": 0.009, "unemployment": 7.5, "employment": 52.6, "gfcf": 22, "productivity": 128731, "balance": -5.1, "gini": 30.4, "region": "Европа", "iso": "FRA"}, {"country": "Великобритания", "gdp": 57602.0, "gni_income": 49470, "inflation": 0.039, "unemployment": 4.7, "employment": 59.8, "gfcf": 19, "productivity": 109099, "balance": -4.3, "gini": 34.0, "region": "Европа", "iso": "GBR"}, {"country": "Швеция", "gdp": 63133.2, "gni_income": 58190, "inflation": 0.007, "unemployment": 8.7, "employment": 61.6, "gfcf": 25, "productivity": 127339, "balance": -2.5, "gini": 28.6, "region": "Европа", "iso": "SWE"}, {"country": "Норвегия", "gdp": 94594.2, "gni_income": 98170, "inflation": 0.031, "unemployment": 4.6, "employment": 62.6, "gfcf": 23, "productivity": 173663, "balance": 10.4, "gini": 23.7, "region": "Европа", "iso": "NOR"}, {"country": "Италия", "gdp": 43308.6, "gni_income": 38590, "inflation": 0.015, "unemployment": 6.4, "employment": 46.8, "gfcf": 22, "productivity": 130633, "balance": -3.1, "gini": 31.0, "region": "Европа", "iso": "ITA"}, {"country": "Испания", "gdp": 38627.2, "gni_income": 33550, "inflation": 0.027, "unemployment": 10.4, "employment": 52.8, "gfcf": 21, "productivity": 113141, "balance": -2.5, "gini": 30.8, "region": "Европа", "iso": "ESP"}, {"country": "Польша", "gdp": 28419.6, "gni_income": 21590, "inflation": 0.038, "unemployment": 3.0, "employment": 56.6, "gfcf": 17, "productivity": 92236, "balance": -7.3, "gini": 24.9, "region": "Европа", "iso": "POL"}, {"country": "Чехия", "gdp": 35917.3, "gni_income": 29560, "inflation": 0.025, "unemployment": 2.8, "employment": 59.3, "gfcf": 26, "productivity": 101292, "balance": -2.1, "gini": 24.0, "region": "Европа", "iso": "CZE"}, {"country": "Венгрия", "gdp": 25907.5, "gni_income": 20770, "inflation": 0.044, "unemployment": 4.5, "employment": 58.8, "gfcf": 22, "productivity": 82051, "balance": -4.7, "gini": 29.5, "region": "Европа", "iso": "HUN"}, {"country": "США", "gdp": 90026.5, "gni_income": 83490, "inflation": 0.03, "unemployment": 4.2, "employment": 59.7, "gfcf": 21, "productivity": 154264, "balance": -5.9, "gini": 42.0, "region": "Северная Америка", "iso": "USA"}, {"country": "Канада", "gdp": 55697.7, "gni_income": 53400, "inflation": 0.021, "unemployment": 6.9, "employment": 60.8, "gfcf": 23, "productivity": 115586, "balance": -1.2, "gini": 33.0, "region": "Северная Америка", "iso": "CAN"}, {"country": "Мексика", "gdp": 13889.2, "gni_income": 12850, "inflation": 0.038, "unemployment": 2.7, "employment": 58.8, "gfcf": 22, "productivity": 48498, "balance": -3.9, "gini": 45.0, "region": "Латинская Америка", "iso": "MEX"}, {"country": "Бразилия", "gdp": 10713.3, "gni_income": 9930, "inflation": 5.0, "unemployment": 6.0, "employment": 59.5, "gfcf": 17, "productivity": 41878, "balance": -8.3, "gini": 53.0, "region": "Латинская Америка", "iso": "BRA"}, {"country": "Аргентина", "gdp": 14898.1, "gni_income": 13530, "inflation": 0.315, "unemployment": 7.1, "employment": 57.6, "gfcf": 16, "productivity": 116833, "balance": 0.2, "gini": 42.4, "region": "Латинская Америка", "iso": "ARG"}, {"country": "Чили", "gdp": 17994.6, "gni_income": 15750, "inflation": 0.042, "unemployment": 9.0, "employment": 56.8, "gfcf": 24, "productivity": 65064, "balance": -2.8, "gini": 45.5, "region": "Латинская Америка", "iso": "CHL"}, {"country": "Колумбия", "gdp": 8561.6, "gni_income": 7040, "inflation": 0.051, "unemployment": 8.3, "employment": 58.6, "gfcf": 16, "productivity": 40311, "balance": -6.4, "gini": 51.5, "region": "Латинская Америка", "iso": "COL"}, {"country": "Китай", "gdp": 13862.0, "gni_income": 13660, "inflation": 0.001, "unemployment": 4.6, "employment": 64.55, "gfcf": 40, "productivity": 47713, "balance": -6.5, "gini": 46.0, "region": "Азия", "iso": "CHN"}, {"country": "Индия", "gdp": 2702.5, "gni_income": 2650, "inflation": 0.024, "unemployment": 4.2, "employment": 55.66, "gfcf": 32, "productivity": 25681, "balance": -4.4, "gini": 25.5, "region": "Азия", "iso": "IND"}, {"country": "Япония", "gdp": 35951.0, "gni_income": 36000, "inflation": 0.032, "unemployment": 2.5, "employment": 63.45, "gfcf": 25, "productivity": 85252, "balance": -0.6, "gini": 33.0, "region": "Азия", "iso": "JPN"}, {"country": "Южная Корея", "gdp": 36227.0, "gni_income": 36750, "inflation": 0.021, "unemployment": 2.7, "employment": 63.1, "gfcf": 28, "productivity": 92941, "balance": -3.9, "gini": 32.0, "region": "Азия", "iso": "KOR"}, {"country": "Индонезия", "gdp": 5059.6, "gni_income": 4910, "inflation": 0.019, "unemployment": 3.2, "employment": 65.0, "gfcf": 29, "productivity": 30220, "balance": -2.92, "gini": 34.4, "region": "Азия", "iso": "IDN"}, {"country": "Вьетнам", "gdp": 5066.0, "gni_income": 4490, "inflation": 0.033, "unemployment": 1.5, "employment": 66.4, "gfcf": 29, "productivity": 27589, "balance": -3.6, "gini": 37.0, "region": "Азия", "iso": "VNM"}, {"country": "Филиппины", "gdp": 4170.7, "gni_income": 4470, "inflation": 0.009, "unemployment": 2.2, "employment": 58.8, "gfcf": 23, "productivity": 24831, "balance": -5.6, "gini": 42.4, "region": "Азия", "iso": "PHL"}, {"country": "Узбекистан", "gdp": 3968.3, "gni_income": 3020, "inflation": 0.088, "unemployment": 4.6, "employment": 57.5, "gfcf": 34, "productivity": 29084, "balance": -3.9, "gini": 32.7, "region": "Азия", "iso": "UZB"}, {"country": "Кыргызстан", "gdp": 3081.0, "gni_income": 2190, "inflation": 0.082, "unemployment": 3.5, "employment": 57.37, "gfcf": 43, "productivity": 19999, "balance": 2.2, "gini": 43.1, "region": "Азия", "iso": "KGZ"}, {"country": "Черногория", "gdp": 14816.8, "gni_income": 12210, "inflation": 0.039, "unemployment": 13.6, "employment": 57.97, "gfcf": 22, "productivity": 70187, "balance": -2.1, "gini": 34.0, "region": "Европа", "iso": "MNE"}, {"country": "Турция", "gdp": 18599.4, "gni_income": 13460, "inflation": 0.349, "unemployment": 8.5, "employment": 49.0, "gfcf": 31, "productivity": 90918, "balance": -0.8, "gini": 43.9, "region": "Азия/Европа", "iso": "TUR"}, {"country": "Израиль", "gdp": 60336.8, "gni_income": 52910, "inflation": 0.03, "unemployment": 3.5, "employment": 65.49, "gfcf": 24, "productivity": 111107, "balance": -4.7, "gini": 37.9, "region": "Азия", "iso": "ISR"}, {"country": "Иордания", "gdp": 5347.8, "gni_income": 4430, "inflation": 0.018, "unemployment": 16.5, "employment": 40.05, "gfcf": 21, "productivity": 42016, "balance": -5.2, "gini": 35.0, "region": "Азия", "iso": "JOR"}, {"country": "Саудовская Аравия", "gdp": 34536.7, "gni_income": 35630, "inflation": 0.021, "unemployment": 3.0, "employment": 65.1, "gfcf": 30, "productivity": 138363, "balance": -5.3, "gini": 78.0, "region": "Азия", "iso": "SAU"}, {"country": "Швейцария", "gdp": 114769.0, "gni_income": 95220, "inflation": 0.002, "unemployment": 4.9, "employment": 64.1, "gfcf": 26, "productivity": 154427, "balance": 0.0, "gini": 33.2, "region": "Европа", "iso": "CHE"}, {"country": "ЮАР", "gdp": 6597.7, "gni_income": 6110, "inflation": 0.032, "unemployment": 32.4, "employment": 55.58, "gfcf": 14, "productivity": 48770, "balance": -4.5, "gini": 63.0, "region": "Африка", "iso": "ZAF"}, {"country": "Египет", "gdp": 3085.8, "gni_income": 3510, "inflation": 0.141, "unemployment": 6.8, "employment": 44.57, "gfcf": 12, "productivity": 60674, "balance": -7.22, "gini": 35.1, "region": "Африка", "iso": "EGY"}, {"country": "Марокко", "gdp": 4672.5, "gni_income": 3840, "inflation": 0.007, "unemployment": 9.0, "employment": 43.94, "gfcf": 27, "productivity": 32181, "balance": -3.6, "gini": 38.4, "region": "Африка", "iso": "MAR"}, {"country": "Нигерия", "gdp": 1224.3, "gni_income": 1700, "inflation": 0.23, "unemployment": 3.1, "employment": 82.52, "gfcf": 18, "productivity": 11514, "balance": -3.87, "gini": 35.1, "region": "Африка", "iso": "NGA"}, {"country": "Кения", "gdp": 2362.9, "gni_income": 2090, "inflation": 0.041, "unemployment": 5.4, "employment": 67.39, "gfcf": 18, "productivity": 14797, "balance": -5.8, "gini": 40.8, "region": "Африка", "iso": "KEN"}, {"country": "Гана", "gdp": 3257.2, "gni_income": 2310, "inflation": 0.142, "unemployment": 3.0, "employment": 58.52, "gfcf": 23, "productivity": 19673, "balance": -2.4, "gini": 30.4, "region": "Африка", "iso": "GHA"}, {"country": "Австралия", "gdp": 65129.7, "gni_income": 62680, "inflation": 2.9, "unemployment": 4.1, "employment": 64.2, "gfcf": 24, "productivity": 116833, "balance": -1.6, "gini": 33.0, "region": "Океания", "iso": "AUS"}];
-const CORR = [{"indicator": "ВВП", "r": -0.2661, "n": 40, "direction": "отрицательная", "strength": "слабая"}, {"indicator": "ВНД", "r": -0.2523, "n": 40, "direction": "отрицательная", "strength": "слабая"}, {"indicator": "Инфляция", "r": 0.1808, "n": 40, "direction": "положительная", "strength": "очень слабая"}, {"indicator": "Безработица", "r": 0.3101, "n": 40, "direction": "положительная", "strength": "слабая"}, {"indicator": "Занятость", "r": 0.0681, "n": 40, "direction": "положительная", "strength": "очень слабая"}, {"indicator": "GFCF / инвестиции", "r": 0.0055, "n": 40, "direction": "положительная", "strength": "очень слабая"}, {"indicator": "Производительность труда", "r": -0.154, "n": 40, "direction": "отрицательная", "strength": "очень слабая"}, {"indicator": "Торговый баланс", "r": -0.3068, "n": 40, "direction": "отрицательная", "strength": "слабая"}];
-const INDICATORS = [["gini", "GNI"], ["gdp", "ВВП"], ["gni_income", "ВНД"], ["inflation", "Инфляция"], ["unemployment", "Безработица"], ["employment", "Занятость"], ["gfcf", "GFCF / инвестиции"], ["productivity", "Производительность труда"], ["balance", "Торговый баланс"]];
-const MEANS = {"gdp": {"<30": 41779.049999999996, "30–40": 32436.95238095238, ">40": 18407.20769230769}, "gni_income": {"<30": 38488.333333333336, "30–40": 29264.761904761905, ">40": 16938.46153846154}, "inflation": {"<30": 0.02816666666666667, "30–40": 0.18676190476190474, ">40": 0.4623846153846154}, "unemployment": {"<30": 4.633333333333333, "30–40": 5.747619047619047, ">40": 7.453846153846154}, "employment": {"<30": 59.09333333333334, "30–40": 58.59095238095239, ">40": 59.13769230769231}, "gfcf": {"<30": 24.166666666666668, "30–40": 23.428571428571427, ">40": 24.23076923076923}, "productivity": {"<30": 100377.0, "30–40": 80515.19047619047, ">40": 65556.84615384616}, "balance": {"<30": -1.7666666666666666, "30–40": -3.1957142857142857, ">40": -4.107692307692307}};
-const REGIONS = {"Мир": [20, 10, 2], "Европа": [54, 15, 4], "Северная Америка": [38, -100, 4], "Латинская Америка": [-12, -65, 3], "Азия": [35, 90, 3], "Африка": [5, 20, 3], "Океания": [-25, 135, 4]};
-const regionOrder = ["Мир", "Евразия", "Европа", "Северная Америка", "Латинская Америка", "Азия", "Африка", "Океания"];
-const regionLabels = {"Мир":"🌍 Мир","Евразия":"🌏 Евразия","Европа":"🇪🇺 Европа","Северная Америка":"🌎 Северная Америка","Латинская Америка":"🌎 Латинская Америка","Азия":"🌏 Азия","Африка":"🌍 Африка","Океания":"🌊 Океания"};
-const bounds = {
-"Мир":[[-60,-180],[75,180]],"Европа":[[34,-12],[72,45]],"Северная Америка":[[7,-170],[75,-50]],
-"Латинская Америка":[[-56,-120],[33,-30]],"Азия":[[-10,25],[78,180]],"Африка":[[-38,-20],[38,55]],"Океания":[[-50,110],[-5,180]],"Евразия":[[35,20],[75,180]]
-};
-const colors = ["#edf1f5","#cbd3dc","#9aa8b7","#687b8e","#344a60"];
-let selectedRegion="Мир", selectedIndex=0, selectedIndicator="gini", geojsonLayer=null, markerLayer=null, radarChart=null, meansChart=null, corrChart=null;
+const DATA=[{"country": "Россия", "gdp": 17546.6, "gni": 15320, "inflation": 0.087, "unemployment": 2.1, "employment": 61.5, "gfcf": 23, "productivity": 85728, "balance": -2.6, "gini": 37.0, "region": "Евразия 🌏", "group": "GNI 30–40", "country_display": "Россия", "iso": "RUS"}, {"country": "Германия", "gdp": 60496.4, "gni": 55090, "inflation": 0.022, "unemployment": 3.7, "employment": 59.3, "gfcf": 20, "productivity": 124203, "balance": -2.7, "gini": 30.1, "region": "Европа", "group": "GNI 30–40", "country_display": "Германия", "iso": "DEU"}, {"country": "Франция", "gdp": 48985.7, "gni": 45160, "inflation": 0.009, "unemployment": 7.5, "employment": 52.6, "gfcf": 22, "productivity": 128731, "balance": -5.1, "gini": 30.4, "region": "Европа", "group": "GNI 30–40", "country_display": "Франция", "iso": "FRA"}, {"country": "Великобр", "gdp": 57602.0, "gni": 49470, "inflation": 0.039, "unemployment": 4.7, "employment": 59.8, "gfcf": 19, "productivity": 109099, "balance": -4.3, "gini": 34.0, "region": "Европа", "group": "GNI 30–40", "country_display": "Великобритания", "iso": "GBR"}, {"country": "Швеция", "gdp": 63133.2, "gni": 58190, "inflation": 0.007, "unemployment": 8.7, "employment": 61.6, "gfcf": 25, "productivity": 127339, "balance": -2.5, "gini": 28.6, "region": "Европа", "group": "GNI <30", "country_display": "Швеция", "iso": "SWE"}, {"country": "Норвегия", "gdp": 94594.2, "gni": 98170, "inflation": 0.031, "unemployment": 4.6, "employment": 62.6, "gfcf": 23, "productivity": 173663, "balance": 10.4, "gini": 23.7, "region": "Европа", "group": "GNI <30", "country_display": "Норвегия", "iso": "NOR"}, {"country": "Италия", "gdp": 43308.6, "gni": 38590, "inflation": 0.015, "unemployment": 6.4, "employment": 46.8, "gfcf": 22, "productivity": 130633, "balance": -3.1, "gini": 31.0, "region": "Европа", "group": "GNI 30–40", "country_display": "Италия", "iso": "ITA"}, {"country": "Испания", "gdp": 38627.2, "gni": 33550, "inflation": 0.027, "unemployment": 10.4, "employment": 52.8, "gfcf": 21, "productivity": 113141, "balance": -2.5, "gini": 30.8, "region": "Европа", "group": "GNI 30–40", "country_display": "Испания", "iso": "ESP"}, {"country": "Польша", "gdp": 28419.6, "gni": 21590, "inflation": 0.038, "unemployment": 3.0, "employment": 56.6, "gfcf": 17, "productivity": 92236, "balance": -7.3, "gini": 24.9, "region": "Европа", "group": "GNI <30", "country_display": "Польша", "iso": "POL"}, {"country": "Чехия", "gdp": 35917.3, "gni": 29560, "inflation": 0.025, "unemployment": 2.8, "employment": 59.3, "gfcf": 26, "productivity": 101292, "balance": -2.1, "gini": 24.0, "region": "Европа", "group": "GNI <30", "country_display": "Чехия", "iso": "CZE"}, {"country": "Венгрия", "gdp": 25907.5, "gni": 20770, "inflation": 0.044, "unemployment": 4.5, "employment": 58.8, "gfcf": 22, "productivity": 82051, "balance": -4.7, "gini": 29.5, "region": "Европа", "group": "GNI <30", "country_display": "Венгрия", "iso": "HUN"}, {"country": "США", "gdp": 90026.5, "gni": 83490, "inflation": 0.03, "unemployment": 4.2, "employment": 59.7, "gfcf": 21, "productivity": 154264, "balance": -5.9, "gini": 42.0, "region": "Северная Америка", "group": "GNI >40", "country_display": "США", "iso": "USA"}, {"country": "Канада", "gdp": 55697.7, "gni": 53400, "inflation": 0.021, "unemployment": 6.9, "employment": 60.8, "gfcf": 23, "productivity": 115586, "balance": -1.2, "gini": 33.0, "region": "Северная Америка", "group": "GNI 30–40", "country_display": "Канада", "iso": "CAN"}, {"country": "Мексика", "gdp": 13889.2, "gni": 12850, "inflation": 0.038, "unemployment": 2.7, "employment": 58.8, "gfcf": 22, "productivity": 48498, "balance": -3.9, "gini": 45.0, "region": "Северная Америка", "group": "GNI >40", "country_display": "Мексика", "iso": "MEX"}, {"country": "Бразилия", "gdp": 10713.3, "gni": 9930, "inflation": 5.0, "unemployment": 6.0, "employment": 59.5, "gfcf": 17, "productivity": 41878, "balance": -8.3, "gini": 53.0, "region": "Латинская Америка", "group": "GNI >40", "country_display": "Бразилия", "iso": "BRA"}, {"country": "Аргентина", "gdp": 14898.1, "gni": 13530, "inflation": 0.315, "unemployment": 7.1, "employment": 57.6, "gfcf": 16, "productivity": 116833, "balance": 0.2, "gini": 42.4, "region": "Латинская Америка", "group": "GNI >40", "country_display": "Аргентина", "iso": "ARG"}, {"country": "Чили", "gdp": 17994.6, "gni": 15750, "inflation": 0.042, "unemployment": 9.0, "employment": 56.8, "gfcf": 24, "productivity": 65064, "balance": -2.8, "gini": 45.5, "region": "Латинская Америка", "group": "GNI >40", "country_display": "Чили", "iso": "CHL"}, {"country": "Колумбия", "gdp": 8561.6, "gni": 7040, "inflation": 0.051, "unemployment": 8.3, "employment": 58.6, "gfcf": 16, "productivity": 40311, "balance": -6.4, "gini": 51.5, "region": "Латинская Америка", "group": "GNI >40", "country_display": "Колумбия", "iso": "COL"}, {"country": "Китай", "gdp": 13862.0, "gni": 13660, "inflation": 0.001, "unemployment": 4.6, "employment": 64.55, "gfcf": 40, "productivity": 47713, "balance": -6.5, "gini": 46.0, "region": "Азия", "group": "GNI >40", "country_display": "Китай", "iso": "CHN"}, {"country": "Индия", "gdp": 2702.5, "gni": 2650, "inflation": 0.024, "unemployment": 4.2, "employment": 55.66, "gfcf": 32, "productivity": 25681, "balance": -4.4, "gini": 25.5, "region": "Азия", "group": "GNI <30", "country_display": "Индия", "iso": "IND"}, {"country": "Япония", "gdp": 35951.0, "gni": 36000, "inflation": 0.032, "unemployment": 2.5, "employment": 63.45, "gfcf": 25, "productivity": 85252, "balance": -0.6, "gini": 33.0, "region": "Азия", "group": "GNI 30–40", "country_display": "Япония", "iso": "JPN"}, {"country": "Юж Корея", "gdp": 36227.0, "gni": 36750, "inflation": 0.021, "unemployment": 2.7, "employment": 63.1, "gfcf": 28, "productivity": 92941, "balance": -3.9, "gini": 32.0, "region": "Азия", "group": "GNI 30–40", "country_display": "Южная Корея", "iso": "KOR"}, {"country": "Индонезия", "gdp": 5059.6, "gni": 4910, "inflation": 0.019, "unemployment": 3.2, "employment": 65.0, "gfcf": 29, "productivity": 30220, "balance": -2.92, "gini": 34.4, "region": "Азия", "group": "GNI 30–40", "country_display": "Индонезия", "iso": "IDN"}, {"country": "Вьетнам", "gdp": 5066.0, "gni": 4490, "inflation": 0.033, "unemployment": 1.5, "employment": 66.4, "gfcf": 29, "productivity": 27589, "balance": -3.6, "gini": 37.0, "region": "Азия", "group": "GNI 30–40", "country_display": "Вьетнам", "iso": "VNM"}, {"country": "Филиппины", "gdp": 4170.7, "gni": 4470, "inflation": 0.009, "unemployment": 2.2, "employment": 58.8, "gfcf": 23, "productivity": 24831, "balance": -5.6, "gini": 42.4, "region": "Азия", "group": "GNI >40", "country_display": "Филиппины", "iso": "PHL"}, {"country": "Узбекистан", "gdp": 3968.3, "gni": 3020, "inflation": 0.088, "unemployment": 4.6, "employment": 57.5, "gfcf": 34, "productivity": 29084, "balance": -3.9, "gini": 32.7, "region": "Азия", "group": "GNI 30–40", "country_display": "Узбекистан", "iso": "UZB"}, {"country": "Кыргызстан", "gdp": 3081.0, "gni": 2190, "inflation": 0.082, "unemployment": 3.5, "employment": 57.37, "gfcf": 43, "productivity": 19999, "balance": 2.2, "gini": 43.1, "region": "Азия", "group": "GNI >40", "country_display": "Кыргызстан", "iso": "KGZ"}, {"country": "черногория", "gdp": 14816.8, "gni": 12210, "inflation": 0.039, "unemployment": 13.6, "employment": 57.97, "gfcf": 22, "productivity": 70187, "balance": -2.1, "gini": 34.0, "region": "Европа", "group": "GNI 30–40", "country_display": "Черногория", "iso": "MNE"}, {"country": "Турция", "gdp": 18599.4, "gni": 13460, "inflation": 0.349, "unemployment": 8.5, "employment": 49.0, "gfcf": 31, "productivity": 90918, "balance": -0.8, "gini": 43.9, "region": "Азия", "group": "GNI >40", "country_display": "Турция", "iso": "TUR"}, {"country": "Израиль", "gdp": 60336.8, "gni": 52910, "inflation": 0.03, "unemployment": 3.5, "employment": 65.49, "gfcf": 24, "productivity": 111107, "balance": -4.7, "gini": 37.9, "region": "Азия", "group": "GNI 30–40", "country_display": "Израиль", "iso": "ISR"}, {"country": "Иордания", "gdp": 5347.8, "gni": 4430, "inflation": 0.018, "unemployment": 16.5, "employment": 40.05, "gfcf": 21, "productivity": 42016, "balance": -5.2, "gini": 35.0, "region": "Азия", "group": "GNI 30–40", "country_display": "Иордания", "iso": "JOR"}, {"country": "Сауд Ара", "gdp": 34536.7, "gni": 35630, "inflation": 0.021, "unemployment": 3.0, "employment": 65.1, "gfcf": 30, "productivity": 138363, "balance": -5.3, "gini": 78.0, "region": "Азия", "group": "GNI >40", "country_display": "Саудовская Аравия", "iso": "SAU"}, {"country": "Швейцария", "gdp": 114769.0, "gni": 95220, "inflation": 0.002, "unemployment": 4.9, "employment": 64.1, "gfcf": 26, "productivity": 154427, "balance": 0.0, "gini": 33.2, "region": "Европа", "group": "GNI 30–40", "country_display": "Швейцария", "iso": "CHE"}, {"country": "ЮАР", "gdp": 6597.7, "gni": 6110, "inflation": 0.032, "unemployment": 32.4, "employment": 55.58, "gfcf": 14, "productivity": 48770, "balance": -4.5, "gini": 63.0, "region": "Африка", "group": "GNI >40", "country_display": "ЮАР", "iso": "ZAF"}, {"country": "Египет", "gdp": 3085.8, "gni": 3510, "inflation": 0.141, "unemployment": 6.8, "employment": 44.57, "gfcf": 12, "productivity": 60674, "balance": -7.22, "gini": 35.1, "region": "Африка", "group": "GNI 30–40", "country_display": "Египет", "iso": "EGY"}, {"country": "Марокко", "gdp": 4672.5, "gni": 3840, "inflation": 0.007, "unemployment": 9.0, "employment": 43.94, "gfcf": 27, "productivity": 32181, "balance": -3.6, "gini": 38.4, "region": "Африка", "group": "GNI 30–40", "country_display": "Марокко", "iso": "MAR"}, {"country": "Нигерия", "gdp": 1224.3, "gni": 1700, "inflation": 0.23, "unemployment": 3.1, "employment": 82.52, "gfcf": 18, "productivity": 11514, "balance": -3.87, "gini": 35.1, "region": "Африка", "group": "GNI 30–40", "country_display": "Нигерия", "iso": "NGA"}, {"country": "Кения", "gdp": 2362.9, "gni": 2090, "inflation": 0.041, "unemployment": 5.4, "employment": 67.39, "gfcf": 18, "productivity": 14797, "balance": -5.8, "gini": 40.8, "region": "Африка", "group": "GNI >40", "country_display": "Кения", "iso": "KEN"}, {"country": "Гана", "gdp": 3257.2, "gni": 2310, "inflation": 0.142, "unemployment": 3.0, "employment": 58.52, "gfcf": 23, "productivity": 19673, "balance": -2.4, "gini": 30.4, "region": "Африка", "group": "GNI 30–40", "country_display": "Гана", "iso": "GHA"}, {"country": "Австралия", "gdp": 65129.7, "gni": 62680, "inflation": 2.9, "unemployment": 4.1, "employment": 64.2, "gfcf": 24, "productivity": 116833, "balance": -1.6, "gini": 33.0, "region": "Океания", "group": "GNI 30–40", "country_display": "Австралия", "iso": "AUS"}];
+const CORR=[{"indicator": "ВВП", "r": -0.2661, "n": 40, "direction": "отрицательная", "strength": "слабая"}, {"indicator": "ВНД", "r": -0.2523, "n": 40, "direction": "отрицательная", "strength": "слабая"}, {"indicator": "Инфляция", "r": 0.1808, "n": 40, "direction": "положительная", "strength": "очень слабая"}, {"indicator": "Безработица", "r": 0.3101, "n": 40, "direction": "положительная", "strength": "слабая"}, {"indicator": "Занятость", "r": 0.0681, "n": 40, "direction": "положительная", "strength": "очень слабая"}, {"indicator": "GFCF / инвестиции", "r": 0.0055, "n": 40, "direction": "положительная", "strength": "очень слабая"}, {"indicator": "Производительность труда", "r": -0.154, "n": 40, "direction": "отрицательная", "strength": "очень слабая"}, {"indicator": "Торговый баланс", "r": -0.3068, "n": 40, "direction": "отрицательная", "strength": "слабая"}];
+const MEANS={"gdp": {"GNI <30": 41779.049999999996, "GNI 30–40": 32436.95238095238, "GNI >40": 18407.20769230769}, "gni": {"GNI <30": 38488.333333333336, "GNI 30–40": 29264.761904761905, "GNI >40": 16938.46153846154}, "inflation": {"GNI <30": 0.028166666666666663, "GNI 30–40": 0.18676190476190474, "GNI >40": 0.46238461538461534}, "unemployment": {"GNI <30": 4.633333333333333, "GNI 30–40": 5.747619047619048, "GNI >40": 7.453846153846154}, "employment": {"GNI <30": 59.093333333333334, "GNI 30–40": 58.59095238095237, "GNI >40": 59.137692307692305}, "gfcf": {"GNI <30": 24.166666666666668, "GNI 30–40": 23.428571428571427, "GNI >40": 24.23076923076923}, "productivity": {"GNI <30": 100377.0, "GNI 30–40": 80515.19047619047, "GNI >40": 65556.84615384616}, "balance": {"GNI <30": -1.7666666666666668, "GNI 30–40": -3.1957142857142857, "GNI >40": -4.107692307692307}};
+const REGIONS={"Мир": {"center": [20, 0], "scale": 1.0}, "Европа": {"center": [54, 18], "scale": 3.0}, "Евразия 🌏": {"center": [55, 70], "scale": 2.2}, "Северная Америка": {"center": [35, -100], "scale": 1.65}, "Латинская Америка": {"center": [-12, -62], "scale": 1.35}, "Азия": {"center": [35, 95], "scale": 1.45}, "Африка": {"center": [3, 20], "scale": 1.45}, "Океания": {"center": [-25, 135], "scale": 2.5}};
 
-function fmt(v,key){ if(v===null||v===undefined||v==="") return "—"; let n=Number(v); if(Number.isNaN(n)) return v; let d=["inflation","unemployment","employment","gfcf","gini"].includes(key)?2:1; return n.toLocaleString("ru-RU",{maximumFractionDigits:d}); }
-function group(g){return g<30?"Джини <30":g<=40?"Джини 30–40":"Джини >40";}
-function countryByIso(iso){return DATA.findIndex(x=>x.iso===iso);}
-function fillControls(){
-  document.getElementById("regions").innerHTML=regionOrder.map(r=>`<button class="btn ${r==="Мир"?"active":""}" data-region="${r}">${regionLabels[r]}</button>`).join("");
-  document.querySelectorAll("[data-region]").forEach(b=>b.onclick=()=>setRegion(b.dataset.region));
-  document.getElementById("indicator").innerHTML=INDICATORS.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join("");
-  document.getElementById("indicator").onchange=e=>{selectedIndicator=e.target.value; updateMarkers();};
+const regionOrder=["Мир","Европа","Евразия 🌏","Северная Америка","Латинская Америка","Азия","Африка","Океания"];
+const meta={
+gini:"GNI",gdp:"ВВП",gni:"ВНД",inflation:"Инфляция",
+unemployment:"Безработица",employment:"Занятость",gfcf:"GFCF / инвестиции",
+productivity:"Производительность труда",balance:"Торговый баланс"
+};
+const keys=Object.keys(meta);
+let currentRegion="Мир";
+let currentCountry=0;
+
+function fmt(v,k){
+  if(v===null||v===undefined||v==="") return "—";
+  if(k==="inflation") return Number(v).toLocaleString("ru-RU",{maximumFractionDigits:3});
+  if(k==="gini"||k==="unemployment"||k==="employment"||k==="gfcf") return Number(v).toLocaleString("ru-RU",{maximumFractionDigits:2});
+  return Number(v).toLocaleString("ru-RU",{maximumFractionDigits:1});
+}
+function group(g){return Number(g)<30?"GNI <30":Number(g)<=40?"GNI 30–40":"GNI >40";}
+
+function initControls(){
+  document.getElementById("regionButtons").innerHTML=regionOrder.map(r=>`<button class="${r===currentRegion?'active':''}" onclick="setRegion('${r}')">${r}</button>`).join("");
+  document.getElementById("indicatorSelect").innerHTML=keys.map(k=>`<option value="${k}">${meta[k]}</option>`).join("");
+  document.getElementById("countrySelect").innerHTML=DATA.map((d,i)=>`<option value="${i}">${d.country_display}</option>`).join("");
+}
+function regionData(){
+  return currentRegion==="Мир"?DATA:DATA.filter(d=>d.region===currentRegion);
 }
 function setRegion(r){
-  selectedRegion=r;
-  document.querySelectorAll("[data-region]").forEach(b=>b.classList.toggle("active",b.dataset.region===r));
-  map.fitBounds(bounds[r],{padding:[20,20]});
-  renderCountryList();
-  updateMarkers();
+  currentRegion=r;
+  document.querySelectorAll("#regionButtons button").forEach(b=>b.classList.toggle("active",b.textContent===r));
+  renderRegionList();
+  renderCountrySelect();
+  renderMap();
 }
-function inRegion(d,r){
-  if(r==="Мир") return true;
-  if(d.region===r) return true;
-  if(r==="Евразия" && (d.country==="Россия"||d.country==="Турция")) return true;
-  // Россия and Turkey are shown in both geographic contexts
-  if(r==="Европа" && (d.country==="Россия"||d.country==="Турция")) return true;
-  if(r==="Азия" && (d.country==="Россия"||d.country==="Турция")) return true;
-  return false;
+function renderRegionList(){
+  const arr=regionData();
+  document.getElementById("regionHead").textContent=`${currentRegion} · ${arr.length} стран`;
+  document.getElementById("regionList").innerHTML=arr.map(d=>{
+    const i=DATA.indexOf(d);
+    return `<div class="region-item ${i===currentCountry?'selected':''}" onclick="selectCountry(${i})"><b>${d.country_display}</b><span>GNI ${fmt(d.gini,"gini")} · ${group(d.gini)}</span></div>`;
+  }).join("");
 }
-function renderCountryList(){
-  let arr=DATA.map((d,i)=>({d,i})).filter(x=>inRegion(x.d,selectedRegion));
-  document.getElementById("regionTitle").textContent=regionLabels[selectedRegion];
-  document.getElementById("regionCount").textContent=`${arr.length} стран в вашей выборке`;
-  document.getElementById("countryList").innerHTML=arr.map(x=>`<div class="country ${x.i===selectedIndex?"active":""}" data-i="${x.i}"><span>${x.d.country}</span><small>GNI ${fmt(x.d.gini,"gini")}</small></div>`).join("");
-  document.querySelectorAll(".country").forEach(el=>el.onclick=()=>selectCountry(Number(el.dataset.i),true));
+function renderCountrySelect(){
+  const arr=regionData();
+  document.getElementById("countrySelect").innerHTML=arr.map(d=>{
+    const i=DATA.indexOf(d); return `<option value="${i}">${d.country_display}</option>`;
+  }).join("");
+  if(arr.length && !arr.includes(DATA[currentCountry])) currentCountry=DATA.indexOf(arr[0]);
+  document.getElementById("countrySelect").value=currentCountry;
+  renderCountry(currentCountry);
 }
-function colorFor(v, vals){
-  let min=Math.min(...vals),max=Math.max(...vals); let t=max===min?0.5:(v-min)/(max-min); let idx=Math.min(4,Math.max(0,Math.floor(t*5))); return colors[idx];
+function selectCountry(i){
+  currentCountry=i;
+  document.getElementById("countrySelect").value=i;
+  renderCountry(i); renderRegionList();
 }
-function updateMarkers(){
-  if(markerLayer) markerLayer.clearLayers();
-  const vals=DATA.map(d=>Number(d[selectedIndicator])).filter(v=>Number.isFinite(v));
-  markerLayer=L.layerGroup();
-  DATA.forEach((d,i)=>{
-    if(!coords[d.iso]) return;
-    let marker=L.circleMarker([coords[d.iso][0],coords[d.iso][1]],{radius:8,weight:2,color:"#fff",fillColor:colorFor(Number(d[selectedIndicator]),vals),fillOpacity:.95});
-    marker.bindTooltip(`<b>${d.country}</b><br>${INDICATORS.find(x=>x[0]===selectedIndicator)[1]}: ${fmt(d[selectedIndicator],selectedIndicator)}`);
-    marker.on("click",()=>selectCountry(i,true));
-    marker.addTo(markerLayer);
-  });
-  markerLayer.addTo(map);
+function renderCountry(i){
+  const d=DATA[i];
+  document.getElementById("countryCard").innerHTML=`
+  <div class="country-title">${d.country_display}</div>
+  <span class="pill">${(d.region==null || d.region==="null" ? "Евразия 🌏" : d.region)}</span><span class="pill">${group(d.gini)}</span><span class="pill">GNI: ${fmt(d.gini,"gini")}</span>
+  <div class="metrics">${keys.slice(1).map(k=>`<div class="metric"><span>${meta[k]}</span><b>${fmt(d[k],k)}</b></div>`).join("")}</div>`;
 }
-function selectCountry(i,fly){
-  selectedIndex=i;
-  let d=DATA[i];
-  document.getElementById("profile").innerHTML=`<div class="countryname">${d.country}</div><span class="badge">${regionLabels[d.region]||d.region}</span><span class="badge">${group(d.gini)}</span><span class="badge">GNI: ${fmt(d.gini,"gini")}</span>
-  <div class="metrics">${INDICATORS.slice(1).map(x=>`<div class="metric"><span>${x[1]}</span><b>${fmt(d[x[0]],x[0])}</b></div>`).join("")}</div>`;
-  if(fly && coords[d.iso]) map.flyTo(coords[d.iso],4,{duration:.8});
-  renderCountryList(); updateRadar();
-}
-function updateRadar(){
-  const d=DATA[selectedIndex];
-  const keys=["gdp","gni_income","inflation","unemployment","employment","gfcf","productivity","balance"];
-  const labels=keys.map(k=>INDICATORS.find(x=>x[0]===k)[1]);
-  const scaled=keys.map(k=>{
-    const vals=DATA.map(x=>Number(x[k])).filter(v=>Number.isFinite(v));
-    const v=Number(d[k]), mn=Math.min(...vals), mx=Math.max(...vals);
-    return mx===mn ? 50 : ((v-mn)/(mx-mn))*100;
-  });
-  if(radarChart) radarChart.destroy();
-  radarChart=new Chart(document.getElementById("radar"),{
-    type:"bar",
-    data:{labels,datasets:[{
-      label:"Положение относительно выборки",
-      data:scaled,
-      borderWidth:1
-    }]},
-    options:{
-      indexAxis:"y", responsive:true, maintainAspectRatio:false,
-      scales:{x:{min:0,max:100,ticks:{callback:v=>v+"%"}}},
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{
-          label:(ctx)=>{
-            const k=keys[ctx.dataIndex];
-            return " "+INDICATORS.find(x=>x[0]===k)[1]+": "+fmt(d[k],k)+" | "+ctx.raw.toFixed(0)+"% от диапазона выборки";
-          }
-        }}
-      }
-    }
+function renderMap(){
+  const key=document.getElementById("indicatorSelect").value;
+  const arr=regionData();
+  const values=arr.map(d=>d[key]);
+  const trace={
+    type:"choropleth",locationmode:"ISO-3",locations:arr.map(d=>d.iso),z:values,
+    text:arr.map(d=>d.country_display),customdata:arr.map(d=>DATA.indexOf(d)),
+    colorscale:[[0,"#e9eef3"],[0.5,"#6f8398"],[1,"#183149"]],
+    marker:{line:{color:"#ffffff",width:.6}},
+    colorbar:{title:meta[key]},
+    hovertemplate:"<b>%{text}</b><br>"+meta[key]+": %{z}<extra></extra>"
+  };
+  const cfg=REGIONS[currentRegion];
+  const layout={
+    margin:{l:0,r:0,t:0,b:0},paper_bgcolor:"#fff",
+    geo:{scope:"world",showframe:false,showcoastlines:true,coastlinecolor:"#aeb8c3",showcountries:true,
+      countrycolor:"#d6dce3",showland:true,landcolor:"#f0f2f5",showocean:true,oceancolor:"#fff",
+      center:{lat:cfg.center[0],lon:cfg.center[1]},projection:{type:"equirectangular",scale:cfg.scale}}
+  };
+  Plotly.react("map",[trace],layout,{responsive:true,displayModeBar:false});
+  const map=document.getElementById("map");
+  map.on("plotly_click",function(ev){
+    if(ev.points?.[0]?.customdata!==undefined) selectCountry(ev.points[0].customdata);
   });
 }
 function renderTable(){
-  let q=document.getElementById("search").value.toLowerCase().trim();
-  const order={"Евразия":1,"Европа":2,"Европа/Азия":3,"Северная Америка":4,"Латинская Америка":5,"Азия":6,"Азия/Европа":7,"Африка":8,"Океания":9};
-  let rows=DATA.filter(d=>d.country.toLowerCase().includes(q))
-    .sort((a,b)=>(order[a.region]||99)-(order[b.region]||99) || a.country.localeCompare(b.country,"ru"));
-  let heads=["Регион","Страна","GNI","Группа","ВВП","ВНД","Инфляция","Безработица","Занятость","GFCF","Производительность","Сальдо"];
-  let keys=["region","country","gini","group","gdp","gni","inflation","unemployment","employment","gfcf","productivity","balance"];
-  let s="<thead><tr>"+heads.map(h=>`<th>${h}</th>`).join("")+"</tr></thead><tbody>";
-  let prev="";
-  rows.forEach(d=>{
-    if(d.region!==prev){
-      s+=`<tr><td colspan="12" style="background:#182331;color:#fff;text-align:left;font-weight:800">${regionLabels[d.region]||d.region}</td></tr>`;
-      prev=d.region;
-    }
-    s+="<tr>"+keys.map(k=>`<td>${k==="group"?group(d.gini):k==="region"?(regionLabels[d.region]||d.region):k==="country"?d.country:fmt(d[k],k)}</td>`).join("")+"</tr>";
-  });
-  document.getElementById("table").innerHTML=s+"</tbody>";
-}
-function renderPatterns(){
- const texts=[
- ["ВВП","r = −0,2661. В выборке наблюдается слабая отрицательная линейная связь: при более высоком Джини средний ВВП имеет тенденцию быть ниже."],
- ["ВНД","r = −0,2523. Наблюдается слабая отрицательная связь между Джини и ВНД."],
- ["Безработица","r = 0,3101. Наблюдается слабая положительная связь; это не доказывает, что изменение Джини вызывает изменение безработицы."],
- ["Торговый баланс","r = −0,3068. Это слабая отрицательная связь, одна из наиболее выраженных по модулю в данной выборке."],
- ["Инфляция","r = 0,1808. Положительное направление есть, но связь очень слабая."],
- ["Занятость и GFCF","r = 0,0681 и 0,0055. Выраженной линейной закономерности в этой выборке практически не наблюдается."],
- ["Производительность","r = −0,1540. Направление отрицательное, но связь очень слабая."]
- ];
- document.getElementById("patterns").innerHTML=texts.map(x=>`<div class="pattern"><b>${x[0]}</b><p class="muted">${x[1]}</p></div>`).join("");
-}
-function renderCorr(){
- document.getElementById("corrBody").innerHTML=CORR.map(x=>`<tr><td>${x.indicator}</td><td>${Number(x.r).toFixed(4)}</td><td>${x.direction}</td><td>${x.strength}</td><td>${x.n}</td></tr>`).join("");
+  const q=document.getElementById("search").value.toLowerCase().trim();
+  const arr=DATA.filter(d=>d.country_display.toLowerCase().includes(q));
+  const headers=["Страна","Регион","GNI","Группа","ВВП","ВНД","Инфляция","Безработица","Занятость","GFCF","Производительность","Торговый баланс"];
+  const ks=["country_display","region","gini","group","gdp","gni","inflation","unemployment","employment","gfcf","productivity","balance"];
+  let s="<thead><tr>"+headers.map(h=>`<th>${h}</th>`).join("")+"</tr></thead><tbody>";
+  for(const d of arr) s+="<tr>"+ks.map(k=>`<td>${k==="country_display"?d.country_display:k==="region"?((d.region==null || d.region==="null" ? "Евразия 🌏" : d.region)):k==="group"?group(d.gini):fmt(d[k],k)}</td>`).join("")+"</tr>";
+  document.getElementById("dataTable").innerHTML=s+"</tbody>";
 }
 function renderCharts(){
- let labels=["<30","30–40",">40"];
- let keys=["gdp","gni","inflation","unemployment","employment","gfcf","productivity","balance"];
- let meansBy=[{label:"ВВП",key:"gdp"},{label:"ВНД",key:"gni"},{label:"Инфляция",key:"inflation"},{label:"Безработица",key:"unemployment"}];
- // A compact chart of the four most legible group comparisons; full values remain in the table.
- let datasets=meansBy.map(x=>({label:x.label,data:labels.map(g=>MEANS[x.key][g]),borderWidth:2}));
- meansChart=new Chart(document.getElementById("meansChart"),{type:"bar",data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{x:{stacked:false}}}});
- corrChart=new Chart(document.getElementById("corrChart"),{type:"bar",data:{labels:CORR.map(x=>x.indicator),datasets:[{label:"r",data:CORR.map(x=>Number(x.r)),borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",scales:{x:{min:-1,max:1}}}});
+  const groupLabels=["GNI <30","GNI 30–40","GNI >40"];
+  const gdpVals=groupLabels.map(g=>MEANS.gdp[g]);
+  Plotly.newPlot("groupChart",[{x:groupLabels,y:gdpVals,type:"bar",text:gdpVals.map(v=>Number(v).toLocaleString("ru-RU",{maximumFractionDigits:0})),textposition:"outside"}],
+    {margin:{l:55,r:20,t:20,b:55},yaxis:{title:"Средний ВВП"},paper_bgcolor:"#fff",plot_bgcolor:"#fff"},{responsive:true,displayModeBar:false});
+  Plotly.newPlot("corrChart",[{x:CORR.map(d=>d.indicator),y:CORR.map(d=>d.r),type:"bar",text:CORR.map(d=>d.r.toFixed(4)),textposition:"outside"}],
+    {margin:{l:55,r:20,t:20,b:125},xaxis:{tickangle:-35},yaxis:{title:"r"},paper_bgcolor:"#fff",plot_bgcolor:"#fff"},{responsive:true,displayModeBar:false});
+  document.getElementById("patternText").innerHTML=`
+  <div class="note" style="margin-top:15px">
+  <b>Наблюдаемые закономерности:</b><br>
+  • при переходе от группы с более низким GNI к группе с более высоким GNI средний ВВП снижается (r = −0,2661);<br>
+  • средний ВНД также снижается (r = −0,2523);<br>
+  • средняя инфляция увеличивается (r = 0,1808), но линейная связь очень слабая;<br>
+  • средняя безработица увеличивается (r = 0,3101), при этом связь классифицируется как слабая;<br>
+  • для занятости и GFCF выраженной линейной связи практически не обнаружено;<br>
+  • производительность труда имеет слабое по выраженности отрицательное направление (r = −0,1540);<br>
+  • среднее торговое сальдо снижается при переходе к группам с более высоким GNI (r = −0,3068).
+  </div>`;
 }
-let map=L.map("map",{worldCopyJump:true,zoomControl:true}).setView([20,10],2);
-// No external tile server: the map background is rendered from the country GeoJSON itself,
-// so it does not depend on OpenStreetMap volunteer-run tile servers.
-map.getContainer().style.background = "#e9eef2";
-
-let coords={
-RUS:[61,100],DEU:[51,10],FRA:[46,2],GBR:[55,-3],SWE:[62,16],NOR:[65,13],ITA:[42,12],ESP:[40,-4],POL:[52,19],CZE:[49.8,15.5],HUN:[47,19],
-USA:[39,-98],CAN:[56,-106],MEX:[23,-102],BRA:[-10,-52],ARG:[-34,-64],CHL:[-33,-71],COL:[4,-74],CHN:[35,103],IND:[22,79],JPN:[36,138],
-KOR:[36,128],IDN:[-2,118],VNM:[16,108],PHL:[13,122],UZB:[41,64],KGZ:[41,75],MNE:[42.7,19.3],TUR:[39,35],ISR:[31.5,35],JOR:[31,36],
-SAU:[24,45],CHE:[46.8,8.2],ZAF:[-30,25],EGY:[27,30],MAR:[32,-6],NGA:[9,8],KEN:[0,38],GHA:[7.9,-1.0],AUS:[-25,134]
-};
-
-// Load world country polygons. Only the 40 data countries receive click handlers/markers.
-fetch("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson")
-.then(r=>r.json()).then(geo=>{
-  geojsonLayer=L.geoJSON(geo,{style:(feature)=>{
-    const iso=feature.properties?.ISO_A3 || feature.properties?.ADM0_A3 || feature.properties?.iso_a3 || "";
-    const isData=countryByIso(iso)>=0;
-    return {color:isData?"#7f8fa0":"#b7c0c8",weight:isData?1.4:0.8,fillColor:isData?"#cfd8e0":"#e5e9ed",fillOpacity:.94};
-  },onEachFeature:(feature,layer)=>{
-    const iso=feature.properties?.ISO_A3 || feature.properties?.ADM0_A3 || feature.properties?.iso_a3 || "";
-    const idx=countryByIso(iso);
-    const name=idx>=0?DATA[idx].country:(feature.properties?.ADMIN || feature.properties?.NAME || feature.properties?.name || "Страна");
-    layer.bindTooltip(name,{sticky:true,direction:"top",opacity:.95});
-    if(idx>=0){
-      layer.on({click:()=>selectCountry(idx,true),mouseover:()=>layer.setStyle({weight:2.5,fillOpacity:1}),mouseout:()=>geojsonLayer.resetStyle(layer)});
-    }
-  }}).addTo(map);
-  map.fitBounds(bounds.Мир,{padding:[10,10]});
-  updateMarkers();
-}).catch(()=>{document.getElementById("map").insertAdjacentHTML("afterbegin","<div style='padding:18px;background:#fff;border:1px solid #e1e5ea;border-radius:10px'>Для отображения карты нужен интернет: страница загружает границы стран из открытого GeoJSON.</div>");updateMarkers();});
-
-fillControls(); renderCountryList(); selectCountry(0,false); renderTable(); renderPatterns(); renderCorr(); renderCharts();
-document.getElementById("search").oninput=renderTable;
+function renderCorr(){
+ document.getElementById("corrBody").innerHTML=CORR.map(d=>`<tr><td style="text-align:left">${d.indicator}</td><td>${d.r.toFixed(4)}</td><td>${d.n}</td><td>${d.direction}</td><td>${d.strength}</td></tr>`).join("");
+}
+initControls();
+renderRegionList();
+renderCountrySelect();
+renderMap();
+renderTable();
+renderCharts();
+renderCorr();
+document.getElementById("indicatorSelect").addEventListener("change",renderMap);
+document.getElementById("countrySelect").addEventListener("change",e=>selectCountry(Number(e.target.value)));
+document.getElementById("search").addEventListener("input",renderTable);
 </script>
-</body></html>
+</body>
+</html>
